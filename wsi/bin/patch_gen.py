@@ -3,24 +3,27 @@ import os
 import argparse
 import logging
 import time
+from shutil import copyfile
 from multiprocessing import Pool, Value, Lock
 
 import openslide
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
-parser = argparse.ArgumentParser(description='Generate patches from a given'
-                                 'given list of coordinates')
+parser = argparse.ArgumentParser(description='Generate patches from a given '
+                                 'list of coordinates')
 parser.add_argument('wsi_path', default=None, metavar='WSI_PATH', type=str,
                     help='Path to the input directory of WSI files')
 parser.add_argument('coords_path', default=None, metavar='COORDS_PATH',
                     type=str, help='Path to the input list of coordinates')
 parser.add_argument('patch_path', default=None, metavar='PATCH_PATH', type=str,
                     help='Path to the output directory of patch images')
-parser.add_argument('--patch_size', default=768, type=int, help='patch size')
-parser.add_argument('--level', default=0, type=int, help='level for WSI')
-parser.add_argument('--num_process', default=10, type=int,
-                    help='number of mutli process')
+parser.add_argument('--patch_size', default=768, type=int, help='patch size, '
+                    'default 768.')
+parser.add_argument('--level', default=0, type=int, help='level for WSI, '
+                    'default 0')
+parser.add_argument('--num_process', default=5, type=int,
+                    help='number of mutli-process, default 5.')
 
 count = Value('i', 0)
 lock = Lock()
@@ -54,6 +57,8 @@ def run(args):
 
     if not os.path.exists(args.patch_path):
         os.mkdir(args.patch_path)
+
+    copyfile(args.coords_path, os.path.join(args.patch_path, 'list.txt'))
 
     opts_list = []
     infile = open(args.coords_path)
