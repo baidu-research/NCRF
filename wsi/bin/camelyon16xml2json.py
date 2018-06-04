@@ -7,8 +7,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
 from wsi.data.annotation import Formatter  # noqa
 
-parser = argparse.ArgumentParser(description='Convert Camelyon16 xml format to\
-                                 internal json format')
+parser = argparse.ArgumentParser(description='Convert Camelyon16 xml format to'
+                                 'internal json format')
 parser.add_argument('xml_path', default=None, metavar='XML_PATH', type=str,
                     help='Path to the directory of Camelyon16 xml files')
 parser.add_argument('json_path', default=None, metavar='JSON_PATH', type=str,
