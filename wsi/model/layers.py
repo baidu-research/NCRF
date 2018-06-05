@@ -30,8 +30,6 @@ class CRF(nn.Module):
                 dim=2, keepdim=True)
             logits = unary_potential + pairwise_potential_E
 
-        logits = torch.squeeze(logits)
-
         return logits
 
     def __repr__(self):

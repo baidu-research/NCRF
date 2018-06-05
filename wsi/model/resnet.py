@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import math
 
@@ -167,6 +168,8 @@ class ResNet(nn.Module):
 
         if self.crf:
             logits = self.crf(feats, logits)
+
+        logits = torch.squeeze(logits)
 
         return logits
 
