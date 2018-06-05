@@ -1,0 +1,18 @@
+{
+ "model": "resnet18",
+ "use_crf": false,
+ "batch_size": 10,
+ "image_size": 768,
+ "patch_size": 256,
+ "crop_size": 224,
+ "lr": 0.001,
+ "momentum": 0.9,
+ "data_path_tumor_train": "/mnt/data/liyi17/pathology/data/CAMELYON16/train/tumor_patches_200Kx768",
+ "data_path_normal_train": "/mnt/data/liyi17/pathology/data/CAMELYON16/train/normal_patches_hard_negative_200Kx768",
+ "data_path_tumor_valid": "/mnt/data/liyi17/pathology/data/CAMELYON16/valid/tumor_patches_20Kx768",
+ "data_path_normal_valid": "/mnt/data/liyi17/pathology/data/CAMELYON16/valid/normal_patches_hard_negative_20Kx768",
+ "json_path_train": "/mnt/home/liyi17/dev/NCRF/jsons/train",
+ "json_path_valid": "/mnt/home/liyi17/dev/NCRF/jsons/valid",
+ "epoch": 20,
+ "log_every": 100
+}

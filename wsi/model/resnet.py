@@ -141,7 +141,7 @@ class ResNet(nn.Module):
     def forward(self, x):
         """
             x here is assumed to be a 5-D tensor with shape of
-            [batch_size, grid_size, crop_size, crop_size, channel_dim],
+            [batch_size, grid_size, 3, crop_size, crop_size],
             where grid_size is the number of patches within a grid (e.g. 9 for
             a 3x3 grid); crop_size is 224 by default for ResNet input;
         """

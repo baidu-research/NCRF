@@ -44,7 +44,7 @@ class GridImageDataset(Dataset):
         self._coords = []
         f = open(os.path.join(self._data_path, 'list.txt'))
         for line in f:
-            pid, x_center, y_center, = line.strip('\n').split(',')[0:3]
+            pid, x_center, y_center = line.strip('\n').split(',')[0:3]
             x_center, y_center = int(x_center), int(y_center)
             self._coords.append((pid, x_center, y_center))
         f.close()
