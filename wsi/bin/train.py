@@ -11,7 +11,8 @@ from torch.autograd import Variable
 from torch.nn import BCEWithLogitsLoss, DataParallel
 from torch.optim import SGD
 
-from tensorboardX import SummaryWriter
+# from tensorboardX import SummaryWriter
+from visualdl import LogWriter
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../')
 
@@ -34,7 +35,7 @@ parser.add_argument('--device_ids', default='0', type=str, help='Comma'
                     ' and GPU_1, default 0.')
 
 
-def train_epoch(summary, summary_writer, cfg, model, loss_fn, optimizer,
+def train_epoch(summary, summary_dict, cfg, model, loss_fn, optimizer,
                 dataloader_tumor, dataloader_normal):
     model.train()
 
@@ -85,8 +86,15 @@ def train_epoch(summary, summary_writer, cfg, model, loss_fn, optimizer,
         summary['step'] += 1
 
         if summary['step'] % cfg['log_every'] == 0:
-            summary_writer.add_scalar('train/loss', loss_data, summary['step'])
-            summary_writer.add_scalar('train/acc', acc_data, summary['step'])
+            # summary_writer.add_scalar('train/loss', loss_data,
+            #                           summary['step'])
+            # summary_writer.add_scalar('train/acc', acc_data,
+            #                           summary['step'])
+            summary_dict['train/loss'].add_record(summary['step'],
+                                                  loss_data)
+            summary_dict['train/acc'].add_record(summary['step'],
+                                                 acc_data)
+            summary_dict['logger'].save()
 
     summary['epoch'] += 1
 
@@ -199,10 +207,21 @@ def run(args):
 
     summary_train = {'epoch': 0, 'step': 0}
     summary_valid = {'loss': float('inf'), 'acc': 0}
-    summary_writer = SummaryWriter(args.save_path)
+
+    # summary_writer = SummaryWriter(args.save_path)
+    logger = LogWriter(args.save_path, sync_cycle=100)
+    summary_dict = {}
+    summary_dict['logger'] = logger
+    with logger.mode('train') as l:
+        summary_dict['train/loss'] = l.scalar('train/loss')
+        summary_dict['train/acc'] = l.scalar('train/acc')
+    with logger.mode('valid') as l:
+        summary_dict['valid/loss'] = l.scalar('valid/loss')
+        summary_dict['valid/acc'] = l.scalar('valid/acc')
+
     loss_valid_best = float('inf')
     for epoch in range(cfg['epoch']):
-        summary_train = train_epoch(summary_train, summary_writer, cfg, model,
+        summary_train = train_epoch(summary_train, summary_dict, cfg, model,
                                     loss_fn, optimizer,
                                     dataloader_tumor_train,
                                     dataloader_normal_train)
@@ -225,10 +244,15 @@ def run(args):
                 summary_train['step'], summary_valid['loss'],
                 summary_valid['acc'], time_spent))
 
-        summary_writer.add_scalar(
-            'valid/loss', summary_valid['loss'], summary_train['step'])
-        summary_writer.add_scalar(
-            'valid/acc', summary_valid['acc'], summary_train['step'])
+        # summary_writer.add_scalar(
+        #     'valid/loss', summary_valid['loss'], summary_train['step'])
+        # summary_writer.add_scalar(
+        #     'valid/acc', summary_valid['acc'], summary_train['step'])
+        summary_dict['valid/loss'].add_record(summary_train['step'],
+                                              summary_valid['loss'])
+        summary_dict['valid/acc'].add_record(summary_train['step'],
+                                             summary_valid['acc'])
+        summary_dict['logger'].save()
 
         if summary_valid['loss'] < loss_valid_best:
             loss_valid_best = summary_valid['loss']
@@ -238,7 +262,7 @@ def run(args):
                         'state_dict': model.module.state_dict()},
                        os.path.join(args.save_path, 'best.ckpt'))
 
-    summary_writer.close()
+    # summary_writer.close()
 
 
 def main():
