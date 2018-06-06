@@ -19,11 +19,11 @@ parser.add_argument('coords_path', default=None, metavar='COORDS_PATH',
 parser.add_argument('patch_path', default=None, metavar='PATCH_PATH', type=str,
                     help='Path to the output directory of patch images')
 parser.add_argument('--patch_size', default=768, type=int, help='patch size, '
-                    'default 768.')
-parser.add_argument('--level', default=0, type=int, help='level for WSI, '
-                    'default 0')
+                    'default 768')
+parser.add_argument('--level', default=0, type=int, help='level for WSI, to '
+                    'generate patches, default 0')
 parser.add_argument('--num_process', default=5, type=int,
-                    help='number of mutli-process, default 5.')
+                    help='number of mutli-process, default 5')
 
 count = Value('i', 0)
 lock = Lock()

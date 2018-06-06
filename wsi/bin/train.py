@@ -27,10 +27,10 @@ parser.add_argument('cfg_path', default=None, metavar='CFG_PATH', type=str,
                     help='Path to the config file in json format')
 parser.add_argument('save_path', default=None, metavar='SAVE_PATH', type=str,
                     help='Path to the saved models')
-parser.add_argument('--num_workers', default=2, type=int, help='Number of'
-                    'orkers for each data loader, default 2.')
-parser.add_argument('--device_ids', default='0', type=str, help='Comma'
-                    'separated indices of GPU to use, e.g. 0,1 for using GPU_0'
+parser.add_argument('--num_workers', default=2, type=int, help='number of'
+                    ' workers for each data loader, default 2.')
+parser.add_argument('--device_ids', default='0', type=str, help='comma'
+                    ' separated indices of GPU to use, e.g. 0,1 for using GPU_0'
                     ' and GPU_1, default 0.')
 
 
