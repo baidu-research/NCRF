@@ -28,7 +28,7 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * Scipy (1.0.1). 
 
-* [PyTorch (0.3.1)/CUDA 8.0](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). Havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
+* [PyTorch (0.3.1)/CUDA 8.0](https://pytorch.org/previous-versions/). The specific binary wheel file is [here](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). Havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
 
 * torchvision (0.2.0)
 
@@ -42,6 +42,6 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * [tensorboardX](https://github.com/lanpa/tensorboard-pytorch). Standard along tensorboard that also works for PyTorch. This is mostly used in monitoring the training curves.
 
-Most of the dependencies can be installed through pip install, except PyTorch which has a strict requirement for the specific version.
+Most of the dependencies can be installed through pip install with version number, e.g. `pip install 'numpy==1.14.3'`. For PyTorch please consider downloading the specific wheel binary and use `pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl`.
 
 
