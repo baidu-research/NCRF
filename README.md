@@ -46,6 +46,10 @@ Most of the dependencies can be installed through pip install with version numbe
 ```
 pip install 'numpy==1.14.3'
 ```
+Or just simply
+```
+pip install numpy
+```
 For PyTorch please consider downloading the specific wheel binary and use
 ```
 pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl
