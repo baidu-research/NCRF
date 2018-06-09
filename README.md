@@ -28,7 +28,7 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * Scipy (1.0.1). 
 
-* [PyTorch (0.3.1)/CUDA 8.0](https://pytorch.org/previous-versions/). The specific binary wheel file is [here](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). Havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
+* [PyTorch (0.3.1)/CUDA 8.0](https://pytorch.org/previous-versions/). The specific binary wheel file is [torch-0.3.1-cp36-cp36m-linux_x86_64.whl](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). Havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
 
 * torchvision (0.2.0)
 
