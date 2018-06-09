@@ -42,6 +42,15 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * [tensorboardX](https://github.com/lanpa/tensorboard-pytorch). Standard along tensorboard that also works for PyTorch. This is mostly used in monitoring the training curves.
 
-Most of the dependencies can be installed through pip install with version number, e.g. `pip install 'numpy==1.14.3'`. For PyTorch please consider downloading the specific wheel binary and use `pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl`.
+Most of the dependencies can be installed through pip install with version number, e.g. 
+```
+pip install 'numpy==1.14.3'
+```
+For PyTorch please consider downloading the specific wheel binary and use
+```
+pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl
+```
+
+
 
 
