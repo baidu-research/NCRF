@@ -4,6 +4,7 @@
 - [Prerequisites](#prerequisites)
 - [Data](#data)
 - [Model](#model)
+- [Training](#training)
 
 
 
@@ -127,3 +128,38 @@ python NCRF/wsi/bin/plot_W.py /PATH_TO_MODEL/best.ckpt
 ```
 When the CRF model is well trained, W typically reflects the relative spatial positions between different patches within the input grid. For more details about the model, please refer to our paper.
 <p align="center"><img src=https://github.com/baidu-research/NCRF/blob/master/doc/W.png width="50%"></p>
+
+
+# Training
+With the generated patch images, we can now train the model by the following command
+```
+python NCRF/wsi/bin/train.py /CFG_PATH/cfg.json /SAVE_PATH/
+```
+where `/CFG_PATH/` is the path to the config file in json format, and `/SAVE_PATH/` is where you want to save your model. Two config files are provided at [NCRF/configs](/configs/), one is for ResNet-18 with CRF
+```json
+{
+ "model": "resnet18",
+ "use_crf": true,
+ "batch_size": 10,
+ "image_size": 768,
+ "patch_size": 256,
+ "crop_size": 224,
+ "lr": 0.001,
+ "momentum": 0.9,
+ "data_path_tumor_train": "/PATCHES_TUMOR_TRAIN/",
+ "data_path_normal_train": "/PATCHES_NORMAL_TRAIN/",
+ "data_path_tumor_valid": "/PATCHES_TUMOR_VALID/",
+ "data_path_normal_valid": "/PATCHES_NORMAL_VALID/",
+ "json_path_train": "NCRF/jsons/train",
+ "json_path_valid": "NCRF/jsons/valid",
+ "epoch": 20,
+ "log_every": 100
+}
+```
+Please modify `/PATCHES_TUMOR_TRAIN/`, `/PATCHES_NORMAL_TRAIN/`, `/PATCHES_TUMOR_VALID/`, `/PATCHES_NORMAL_VALID/` respectively to your own path of generated patch images. Please also modify `NCRF/jsons/train` and `NCRF/jsons/valid` with respect to the full path to the NCRF repo on your machine. The other config file is for ResNet-18 without CRF (the baseline model). 
+
+By default, `train.py` use 1 GPU (GPU_0) to train model, 2 processes for load tumor patch images, and 2 processes to load normal patch images. On one GTX 1080Ti, it took about 5 hours to train 1 epoch, and 4 days to finish 20 epoches.
+![training_acc](/doc/training_acc.png)
+Typically, you will observe the CRF model consistently achieves higher training accuracy than the baseline model.
+
+
