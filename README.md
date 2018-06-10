@@ -3,6 +3,7 @@
 - [NCRF](#ncrf)
 - [Prerequisites](#prerequisites)
 - [Data](#data)
+- [Model](#model)
 
 
 
@@ -80,4 +81,51 @@ python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/normal_valid.txt /PATCH
 where `/WSI_TRAIN/` is the path to the directory where you put all the WSI files for training as mentioned above, and `/PATCHES_TUMOR_TRAIN/` is the path to the directory to store tumor patches for training. Same naming applies to `/PATCHES_NORMAL_TRAIN/`, `/PATCHES_TUMOR_VALID/` and `/PATCHES_NORMAL_VALID/`. By default, each command is going to generate patches of size 768x768 at level 0 using 5 processes, where the center of each patch corresponds to the coordinates. Each 768x768 patch is going to be further split into a 3x3 grid of 256x256 patches, when the training algorithm that leverages CRF comes into play.
 
 Note that, generating 200,000 768x768 patches using 5 processes took me about 4.5 hours, and is about 202GB on disk. 
+
+
+# Model
+![NCRF](/doc/NCRF.png)
+The core idea of NCRF is taking a grid of patches as input, e.g. 3x3, using CNN module to extract patch embeddings, and using CRF module to model their spatial correlations. The [CNN module](/wsi/model/resnet.py) is adopted from the standard ResNet released by torchvision (https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py). The major difference is during the forward pass that 1. the input tensor has one more dimension, 2. use the CRF module to smooth the logit of each patch using their embeddings.
+```python
+def forward(self, x):
+    """
+        x here is assumed to be a 5-D tensor with shape of
+        [batch_size, grid_size, 3, crop_size, crop_size],
+        where grid_size is the number of patches within a grid (e.g. 9 for
+        a 3x3 grid); crop_size is 224 by default for ResNet input;
+    """
+    batch_size, grid_size, _, crop_size = x.shape[0:4]
+    x = x.view(-1, 3, crop_size, crop_size)
+
+    x = self.conv1(x)
+    x = self.bn1(x)
+    x = self.relu(x)
+    x = self.maxpool(x)
+
+    x = self.layer1(x)
+    x = self.layer2(x)
+    x = self.layer3(x)
+    x = self.layer4(x)
+
+    x = self.avgpool(x)
+    feats = x.view(x.size(0), -1)
+    logits = self.fc(feats)
+
+    feats = feats.view((batch_size, grid_size, -1))
+    logits = logits.view((batch_size, grid_size, -1))
+
+    if self.crf:
+        logits = self.crf(feats, logits)
+
+    logits = torch.squeeze(logits)
+
+    return logits
+```
+The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi/model/layers.py#L13) for pairwise potential between patches. You can plot the W from the ckpt file of a trained CRF model by
+```
+python NCRF/wsi/bin/plot_W.py /PATH_TO_MODEL/best.ckpt
+```
+When the CRF model is well trained, W typically reflects the relative spatial positions between different patches within the input grid. For more details about the model, please refer to our paper.
+![W](/doc/W.png)
+
 
