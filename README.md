@@ -70,4 +70,14 @@ python NCRF/wsi/bin/camelyon16xml2json.py Tumor_001.xml Tumor_001.json
 ```
 
 ## Patch images
-Although the original 400 WSI files contain all the necessary information, they are not directly applicable to train a deep CNN. Therefore, we have to sample much smaller image patches, e.g. 256x256, that a typical deep CNN can handle. Efficiently sampling informative and representative patches is one of the most critical parts to achieve good tumor detection performance. To ease this process, I have included the coordinates of pre-sampled patches used in the paper for training within this repo. They are located at `NCRF/coords/`. Each one is a csv file, where each line within the file is in the format like `Tumor_024,25417,127565` that the last two numbers are (x, y) coordinates of the center of each patch at level 0.
+Although the original 400 WSI files contain all the necessary information, they are not directly applicable to train a deep CNN. Therefore, we have to sample much smaller image patches, e.g. 256x256, that a typical deep CNN can handle. Efficiently sampling informative and representative patches is one of the most critical parts to achieve good tumor detection performance. To ease this process, I have included the coordinates of pre-sampled patches used in the paper for training within this repo. They are located at `NCRF/coords/`. Each one is a csv file, where each line within the file is in the format like `Tumor_024,25417,127565` that the last two numbers are (x, y) coordinates of the center of each patch at level 0. `tumor_train.txt` and `normal_train.txt` contains 200,000 coordinates respectively, and `tumor_valid.txt` and `normal_valid.txt` contains 20,000 coordinates respectively. Note that, coordinates of hard negative patches, typically around tissue boundary regions, are also included within `normal_train.txt` and `normal_valid.txt`. With the original WSI and pre-sampled coordinates, we can now generate image patches for training deep CNN models. Run the four commands below to generate the corresponding patches:
+```
+python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/tumor_train.txt /PATCHES_TUMOR_TRAIN/
+python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/normal_train.txt /PATCHES_NORMAL_TRAIN/
+python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/tumor_valid.txt /PATCHES_TUMOR_VALID/
+python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/normal_valid.txt /PATCHES_NORMAL_VALID/
+```
+By default, each command is going to generate patches of size 768x768 at level 0 using 5 processes, where the center of each patch corresponds to the coordinates. Each 768x768 patch is going to be further split into a 3x3 grid of 256x256 patches, when the training algorithm that leverages CRF comes into play.
+
+Note that, generating 200,000 768x768 patches using 5 processes took me about 4.5 hours, and is about 202GB on disk. 
+
