@@ -21,11 +21,14 @@ from wsi.model import MODELS  # noqa
 
 
 parser = argparse.ArgumentParser(description='Get the probability map of tumor'
-                                 'patch predictions given a WSI')
-parser.add_argument('model_path', default=None, metavar='MODEL_PATH', type=str,
-                    help='Path to the directory of pytorch model')
+                                 ' patch predictions given a WSI')
 parser.add_argument('wsi_path', default=None, metavar='WSI_PATH', type=str,
                     help='Path to the input WSI file')
+parser.add_argument('ckpt_path', default=None, metavar='CKPT_PATH', type=str,
+                    help='Path to the saved ckpt file of a pytorch model')
+parser.add_argument('cfg_path', default=None, metavar='CFG_PATH', type=str,
+                    help='Path to the config file in json format related to'
+                    ' the ckpt file')
 parser.add_argument('mask_path', default=None, metavar='MASK_PATH', type=str,
                     help='Path to the tissue mask of the input WSI file')
 parser.add_argument('probs_map_path', default=None, metavar='PROBS_MAP_PATH',
@@ -89,7 +92,7 @@ def run(args):
     os.environ["CUDA_VISIBLE_DEVICES"] = args.GPU
     logging.basicConfig(level=logging.INFO)
 
-    with open(os.path.join(args.model_path, 'cfg.json')) as f:
+    with open(args.cfg_path) as f:
         cfg = json.load(f)
 
     if cfg['image_size'] % cfg['patch_size'] != 0:
@@ -100,7 +103,7 @@ def run(args):
     grid_size = patch_per_side * patch_per_side
 
     mask = np.load(args.mask_path)
-    ckpt = torch.load(os.path.join(args.model_path, 'best.ckpt'))
+    ckpt = torch.load(args.ckpt_path)
     model = MODELS[cfg['model']](num_nodes=grid_size, use_crf=cfg['use_crf'])
     model.load_state_dict(ckpt['state_dict'])
     model = model.cuda().eval()
