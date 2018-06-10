@@ -77,7 +77,7 @@ python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/normal_train.txt /PATCH
 python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/tumor_valid.txt /PATCHES_TUMOR_VALID/
 python NCRF/wsi/bin/patch_gen.py /WSI_TRAIN/ NCRF/coords/normal_valid.txt /PATCHES_NORMAL_VALID/
 ```
-By default, each command is going to generate patches of size 768x768 at level 0 using 5 processes, where the center of each patch corresponds to the coordinates. Each 768x768 patch is going to be further split into a 3x3 grid of 256x256 patches, when the training algorithm that leverages CRF comes into play.
+where `/WSI_TRAIN/` is the path to the directory where you put all the WSI files for training as mentioned above, and `/PATCHES_TUMOR_TRAIN/` is the path to the directory to store tumor patches for training. Same naming applies to `/PATCHES_NORMAL_TRAIN/`, `/PATCHES_TUMOR_VALID/` and `/PATCHES_NORMAL_VALID/`. By default, each command is going to generate patches of size 768x768 at level 0 using 5 processes, where the center of each patch corresponds to the coordinates. Each 768x768 patch is going to be further split into a 3x3 grid of 256x256 patches, when the training algorithm that leverages CRF comes into play.
 
 Note that, generating 200,000 768x768 patches using 5 processes took me about 4.5 hours, and is about 202GB on disk. 
 
