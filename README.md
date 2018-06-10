@@ -126,6 +126,4 @@ The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi
 python NCRF/wsi/bin/plot_W.py /PATH_TO_MODEL/best.ckpt
 ```
 When the CRF model is well trained, W typically reflects the relative spatial positions between different patches within the input grid. For more details about the model, please refer to our paper.
-![W](/doc/W.png)
-
-
+<p align="center"><img src=https://github.com/baidu-research/NCRF/blob/master/doc/W.png width="50%"></p>
