@@ -8,7 +8,8 @@
     - [Patch images](#patch-images)
 - [Model](#model)
 - [Training](#training)
-
+- [Testing](#testing)
+    - [Tissue mask](#tissue-mask)
 
 
 # NCRF
@@ -166,5 +167,17 @@ Please modify `/PATCHES_TUMOR_TRAIN/`, `/PATCHES_NORMAL_TRAIN/`, `/PATCHES_TUMOR
 By default, `train.py` use 1 GPU (GPU_0) to train model, 2 processes for load tumor patch images, and 2 processes to load normal patch images. On one GTX 1080Ti, it took about 5 hours to train 1 epoch, and 4 days to finish 20 epoches.
 ![training_acc](/doc/training_acc.png)
 Typically, you will observe the CRF model consistently achieves higher training accuracy than the baseline model.
+
+
+# Testing
+## Tissue mask
+The main testing results from a trained model for WSI analysis is the probability map that represents where on the WSI the model thinks is tumor region. Naively, we can use a sliding window fashion that predicts the probability of all the patches being tumor or not across the whole slide image. But since most part of the WSI is actually white background region, lots of computation is wasted in this sliding window fashion. Instead, we first compute a binary tissue mask that represent each patch is tissue or background, and then tumor prediction is only performed on tissue region. A typical WSI and its tissue mask looks like this (Test_026)
+![tissue_mask](/doc/tissue_mask.png)
+To obtain the tissue mask of a given input WSI, e.g. Test_026.tif, run the following command
+```
+python NCRF/wsi/bin/tissue_mask.py /PATH_WSI/Test_026.tif /PATH_NPY/Test_026.npy
+```
+where `/PATH_WSI/` is the path to the WSI you are interested, and `/PATH_NPY/` is the path where you want to save the generated tissue mask in numpy format. By default, the tissue mask is generated at level 6.
+
 
 
