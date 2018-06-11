@@ -10,6 +10,7 @@
 - [Training](#training)
 - [Testing](#testing)
     - [Tissue mask](#tissue-mask)
+    - [Probability map](#probability-map)
 
 
 # NCRF
@@ -141,7 +142,7 @@ With the generated patch images, we can now train the model by the following com
 ```
 python NCRF/wsi/bin/train.py /CFG_PATH/cfg.json /SAVE_PATH/
 ```
-where `/CFG_PATH/` is the path to the config file in json format, and `/SAVE_PATH/` is where you want to save your model. Two config files are provided at [NCRF/configs](/configs/), one is for ResNet-18 with CRF
+where `/CFG_PATH/` is the path to the config file in json format, and `/SAVE_PATH/` is where you want to save your model in checkpoint(ckpt) format. Two config files are provided at [NCRF/configs](/configs/), one is for ResNet-18 with CRF
 ```json
 {
  "model": "resnet18",
@@ -168,6 +169,8 @@ By default, `train.py` use 1 GPU (GPU_0) to train model, 2 processes for load tu
 ![training_acc](/doc/training_acc.png)
 Typically, you will observe the CRF model consistently achieves higher training accuracy than the baseline model.
 
+`train.py` will generate a `train.ckpt`, which is the most recently saved model, and a `best.ckpt`, which is the model with the best validation accuracy. We also provide the [best.ckpt](/ckpt/) of pretained resnet18_base and resnet18_crf. 
+
 
 # Testing
 ## Tissue mask
@@ -175,9 +178,23 @@ The main testing results from a trained model for WSI analysis is the probabilit
 ![tissue_mask](/doc/tissue_mask.png)
 To obtain the tissue mask of a given input WSI, e.g. Test_026.tif, run the following command
 ```
-python NCRF/wsi/bin/tissue_mask.py /PATH_WSI/Test_026.tif /PATH_NPY/Test_026.npy
+python NCRF/wsi/bin/tissue_mask.py /WSI_PATH/Test_026.tif /MASK_PATH/Test_026.npy
 ```
-where `/PATH_WSI/` is the path to the WSI you are interested, and `/PATH_NPY/` is the path where you want to save the generated tissue mask in numpy format. By default, the tissue mask is generated at level 6.
+where `/WSI_PATH/` is the path to the WSI you are interested, and `/MASK_PATH/` is the path where you want to save the generated tissue mask in numpy format. By default, the tissue mask is generated at level 6, corresponding to the inference stride of 64, i.e. making a prediction every 64 pixels at level 0.
+
+
+## Probability map
+With the generated tissue mask, we can now obtain the probability map of a given WSI, e.g. Test_026.tif, using a trained model:
+```
+python NCRF/wsi/bin/probs_map.py /WSI_PATH/Test_026.tif /CKPT_PATH/best.ckpt /CFG_PATH/cfg.json /MASK_PATH/Test_026.npy /PROBS_MAP_PATH/Test_026.npy
+```
+where `/WSI_PATH/` is the path to the WSI you are interested. `/CKPT_PATH/` is where you saved your trained model and best.ckpt corresponds to the model with the best validation accuracy. `/CFG_PATH/` is the path to the config file of the trained model in json format, and is typically the same as `/CKPT_PATH/`. `/MASK_PATH/` is where you saved the generated tissue mask. `/PROBS_MAP_PATH/` is where you want to save the generated probability map in numpy format.
+
+By defautl, `probs_map.py` use GPU_0 for interence, 5 processes for data loading. Note that, although we load a grid of patches, e.g. 3x3, only the predicted probability of the center patch is retained for easy implementation. And because of this heavy computational overhead, it takes 0.5-1 hour to obtain the probability map of one WSI. We are thinking about developing more efficient inference algorithm for obtaining probability maps.
+![probability_map](/doc/probability_map.png)
+This figure shows the probability maps of Test_026 with different settings: (a) original WSI, (b) ground truth annotation, (c) baseline method, (d) baseline method with hard negative mining, (e) NCRF with hard negative mining. We can see the probability map from the baseline method typically has lots of isolated false positives. Hard negative mining significantly reduces the number of false positives for the baseline method, but the probability density among the ground truth tumor regions is also decreased, which decreases model sensitivity. NCRF with hard negative mining not only achieves low false positives but also maintains high probability density among the ground truth tumor regions with sharp boundaries.
+
+
 
 
 
