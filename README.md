@@ -3,6 +3,9 @@
 - [NCRF](#ncrf)
 - [Prerequisites](#prerequisites)
 - [Data](#data)
+    - [Whole slide images](#whole-slide-images)
+    - [Annotations](#annotations)
+    - [Patch images](#patch-images)
 - [Model](#model)
 - [Training](#training)
 
@@ -32,7 +35,7 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * Scipy (1.0.1)
 
-* [PyTorch (0.3.1)/CUDA 8.0](https://pytorch.org/previous-versions/). The specific binary wheel file is [torch-0.3.1-cp36-cp36m-linux_x86_64.whl](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). I havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
+* [PyTorch (0.3.1)/CUDA 8.0](https://pytorch.org/previous-versions/) The specific binary wheel file is [torch-0.3.1-cp36-cp36m-linux_x86_64.whl](http://download.pytorch.org/whl/cu80/torch-0.3.1-cp36-cp36m-linux_x86_64.whl). I havn't tested on other versions, especially 0.4+, wouldn't recommend using other versions.
 
 * torchvision (0.2.0)
 
@@ -44,7 +47,9 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * matplotlib (2.2.2)
 
-* [tensorboardX](https://github.com/lanpa/tensorboard-pytorch). Standard along tensorboard that also works for PyTorch. This is mostly used in monitoring the training curves.
+* [tensorboardX](https://github.com/lanpa/tensorboard-pytorch) Standard along tensorboard that also works for PyTorch. This is mostly used in monitoring the training curves.
+
+* [QuPath](https://qupath.github.io/) Although not directly relevant to training/testing models, I found it very useful to visualize the whole slide images.
 
 Most of the dependencies can be installed through pip install with version number, e.g. 
 ```
