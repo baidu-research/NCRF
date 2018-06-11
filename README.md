@@ -11,6 +11,7 @@
 - [Testing](#testing)
     - [Tissue mask](#tissue-mask)
     - [Probability map](#probability-map)
+    - [Tumor localization](#tumor-localization)
 
 
 # NCRF
@@ -196,5 +197,11 @@ This figure shows the probability maps of Test_026 with different settings: (a) 
 
 
 
+## Tumor localization
+We use non-maximal suppression (nms) algorithm to obtain the coordinates of each detectd tumor region given a probability map.
+```
+python NCRF/bin/nms.py /PROBS_MAP_PATH/Test_026.npy /COORD_PATH/Test_026.csv
+```
+where `/PROBS_MAP_PATH/` is where you saved the generated probability map, and `/COORD_PATH/` is where you want to save the generated coordinates of each tumor regions in csv format at level 0. There is an optional command `--level` with default value 6, and make sure it's consistent with the level of the corresponding tissue mask and probability map.
 
 
