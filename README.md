@@ -131,7 +131,7 @@ def forward(self, x):
 
     return logits
 ```
-The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi/model/layers.py#L13) for pairwise potential between patches. You can plot the W from the ckpt file of a trained CRF model by
+The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi/model/layers.py#L13) for pairwise potential between patches. You can plot the W from the ckpt file (see next section) of a trained CRF model by
 ```
 python NCRF/wsi/bin/plot_W.py /PATH_TO_MODEL/best.ckpt
 ```
@@ -199,11 +199,11 @@ This figure shows the probability maps of Test_026 with different settings: (a) 
 
 
 ## Tumor localization
-We use non-maximal suppression (nms) algorithm to obtain the coordinates of each detectd tumor region given a probability map.
+We use non-maximal suppression (nms) algorithm to obtain the coordinates of each detectd tumor region at level 0 given a probability map.
 ```
 python NCRF/wsi/bin/nms.py /PROBS_MAP_PATH/Test_026.npy /COORD_PATH/Test_026.csv
 ```
-where `/PROBS_MAP_PATH/` is where you saved the generated probability map, and `/COORD_PATH/` is where you want to save the generated coordinates of each tumor regions in csv format at level 0. There is an optional command `--level` with default value 6, and make sure it's consistent with the level of the corresponding tissue mask and probability map.
+where `/PROBS_MAP_PATH/` is where you saved the generated probability map, and `/COORD_PATH/` is where you want to save the generated coordinates of each tumor regions at level 0 in csv format. There is an optional command `--level` with default value 6, and make sure it's consistent with the level used for the corresponding tissue mask and probability map.
 
 
 ## FROC evaluation
@@ -211,5 +211,5 @@ With the coordinates of tumor regions for each test WSI, we can finally evaluate
 ```
 python NCRF/wsi/bin/Evaluation_FROC.py /TEST_MASK/ /COORD_PATH/
 ```
-`/TEST_MASK/` is where you put the ground truth tif mask files, and `/COORD_PATH/` is where you saved the generated tumor coordinates. `Evaluation_FROC.py` is based on the evaluation code provided by the Camelyon16 organizers with minor modification. Note, Test_049 and Test_114 are excluded from the evaluation as noted by the Camelyon16 organizers.
+`/TEST_MASK/` is where you put the ground truth tif mask files of the test set, and `/COORD_PATH/` is where you saved the generated tumor coordinates. `Evaluation_FROC.py` is based on the evaluation code provided by the Camelyon16 organizers with minor modification. Note, Test_049 and Test_114 are excluded from the evaluation as noted by the Camelyon16 organizers.
 
