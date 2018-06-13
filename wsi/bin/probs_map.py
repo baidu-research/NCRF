@@ -39,7 +39,7 @@ parser.add_argument('--num_workers', default=5, type=int, help='number of '
                     'workers to use to make batch, default 5')
 parser.add_argument('--eight_avg', default=0, type=int, help='if using average'
                     ' of the 8 direction predictions for each patch,'
-                    ' default 0')
+                    ' default 0, which means disabled')
 
 
 def get_probs_map(model, dataloader):
