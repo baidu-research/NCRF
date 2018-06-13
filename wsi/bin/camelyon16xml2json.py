@@ -10,22 +10,13 @@ from wsi.data.annotation import Formatter  # noqa
 parser = argparse.ArgumentParser(description='Convert Camelyon16 xml format to'
                                  'internal json format')
 parser.add_argument('xml_path', default=None, metavar='XML_PATH', type=str,
-                    help='Path to the directory of Camelyon16 xml files')
+                    help='Path to the input Camelyon16 xml annotation')
 parser.add_argument('json_path', default=None, metavar='JSON_PATH', type=str,
-                    help='Path to the directory of json files')
+                    help='Path to the output annotation in json format')
 
 
 def run(args):
-    xml_files = [f for f in os.listdir(args.xml_path)]
-
-    if not os.path.exists(args.json_path):
-        os.mkdir(args.json_path)
-
-    for xml_file_name in xml_files:
-        pid = xml_file_name.split('.')[0]
-        inxml = os.path.join(args.xml_path, xml_file_name)
-        outjson = os.path.join(args.json_path, pid + '.json')
-        Formatter.camelyon16xml2json(inxml, outjson)
+    Formatter.camelyon16xml2json(args.xml_path, args.json_path)
 
 
 def main():
