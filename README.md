@@ -167,7 +167,10 @@ where `/CFG_PATH/` is the path to the config file in json format, and `/SAVE_PAT
 ```
 Please modify `/PATCHES_TUMOR_TRAIN/`, `/PATCHES_NORMAL_TRAIN/`, `/PATCHES_TUMOR_VALID/`, `/PATCHES_NORMAL_VALID/` respectively to your own path of generated patch images. Please also modify `NCRF/jsons/train` and `NCRF/jsons/valid` with respect to the full path to the NCRF repo on your machine. The other config file is for ResNet-18 without CRF (the baseline model). 
 
-By default, `train.py` use 1 GPU (GPU_0) to train model, 2 processes for load tumor patch images, and 2 processes to load normal patch images. On one GTX 1080Ti, it took about 5 hours to train 1 epoch, and 4 days to finish 20 epoches.
+By default, `train.py` use 1 GPU (GPU_0) to train model, 2 processes for load tumor patch images, and 2 processes to load normal patch images. On one GTX 1080Ti, it took about 5 hours to train 1 epoch, and 4 days to finish 20 epoches. You can also use tensorboard to monitor the training process
+```
+tensorboard --logdir /SAVE_PATH/
+```
 ![training_acc](/doc/training_acc.png)
 Typically, you will observe the CRF model consistently achieves higher training accuracy than the baseline model.
 
