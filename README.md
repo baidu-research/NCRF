@@ -63,6 +63,10 @@ Or just simply
 ```
 pip install numpy
 ```
+A [requirements.txt](requirements.txt) file is also provided, so that you can install most of the dependencies at once:
+```
+pip install -r requirements.txt -i https://pypi.python.org/simple/
+```
 For PyTorch please consider downloading the specific wheel binary and use
 ```
 pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl
