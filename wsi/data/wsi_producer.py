@@ -7,8 +7,30 @@ np.random.seed(0)
 
 
 class GridWSIPatchDataset(Dataset):
+    """
+    Data producer that generate all the square grids, e.g. 3x3, of patches,
+    from a WSI and its tissue mask, and their corresponding indices with
+    respect to the tissue mask
+    """
     def __init__(self, wsi_path, mask_path, image_size=768, patch_size=256,
                  crop_size=224, normalize=True, flip='NONE', rotate='NONE'):
+        """
+        Initialize the data producer.
+
+        Arguments:
+            wsi_path: string, path to WSI file
+            mask_path: string, path to mask file in numpy format
+            image_size: int, size of the image before splitting into grid, e.g.
+                768
+            patch_size: int, size of the patch, e.g. 256
+            crop_size: int, size of the final crop that is feed into a CNN,
+                e.g. 224 for ResNet
+            normalize: bool, if normalize the [0, 255] pixel values to [-1, 1],
+                mostly False for debuging purpose
+            flip: string, 'NONE' or 'FLIP_LEFT_RIGHT' indicating the flip type
+            rotate: string, 'NONE' or 'ROTATE_90' or 'ROTATE_180' or
+                'ROTATE_270', indicating the rotate type
+        """
         self._wsi_path = wsi_path
         self._mask_path = mask_path
         self._image_size = image_size
@@ -37,6 +59,7 @@ class GridWSIPatchDataset(Dataset):
             raise Exception('Resolution (X_slide / X_mask) is not power of 2 :'
                             ' {}'.format(self._resolution))
 
+        # all the idces for tissue region from the tissue mask
         self._X_idcs, self._Y_idcs = np.where(self._mask)
         self._idcs_num = len(self._X_idcs)
 
@@ -80,6 +103,7 @@ class GridWSIPatchDataset(Dataset):
         if self._normalize:
             img = (img - 128.0)/128.0
 
+        # flatten the square grid
         img_flat = np.zeros(
             (self._grid_size, 3, self._crop_size, self._crop_size),
             dtype=np.float32)
@@ -87,6 +111,7 @@ class GridWSIPatchDataset(Dataset):
         idx = 0
         for x_idx in range(self._patch_per_side):
             for y_idx in range(self._patch_per_side):
+                # center crop each patch
                 x_start = int(
                     (x_idx + 0.5) * self._patch_size - self._crop_size / 2)
                 x_end = x_start + self._crop_size

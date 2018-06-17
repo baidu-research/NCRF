@@ -45,6 +45,7 @@ parser.add_argument('--eight_avg', default=0, type=int, help='if using average'
 def get_probs_map(model, dataloader):
     probs_map = np.zeros(dataloader.dataset._mask.shape)
     num_batch = len(dataloader)
+    # only use the prediction of the center patch within the grid
     idx_center = dataloader.dataset._grid_size // 2
 
     count = 0
@@ -52,8 +53,9 @@ def get_probs_map(model, dataloader):
     for (data, x_mask, y_mask) in dataloader:
         data = Variable(data.cuda(async=True), volatile=True)
         output = model(data)
-        # surprisingly, if the len of dim_0 of data is 1, then output removes
-        # this dim
+        # because of torch.squeeze at the end of forward in resnet.py, if the
+        # len of dim_0 (batch_size) of data is 1, then output removes this dim.
+        # should be fixed in resnet.py by specifying torch.squeeze(dim=2) later
         if len(output.shape) == 1:
             probs = output[idx_center].sigmoid().cpu().data.numpy().flatten()
         else:
