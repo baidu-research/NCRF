@@ -142,7 +142,7 @@ def forward(self, x):
 
     return logits
 ```
-The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi/model/layers.py#L13) for pairwise potential between patches. You can plot the W from the ckpt file (see next section) of a trained CRF model by
+The [CRF module](/wsi/model/layers.py) only has one trainable parameter [W](/wsi/model/layers.py#L16) for pairwise potential between patches. You can plot the W from the ckpt file (see next section) of a trained CRF model by
 ```
 python NCRF/wsi/bin/plot_W.py /PATH_TO_MODEL/best.ckpt
 ```
