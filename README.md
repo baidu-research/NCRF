@@ -74,7 +74,7 @@ pip install torch-0.3.1-cp36-cp36m-linux_x86_64.whl
 
 # Data
 ## Whole slide images
-The main data are the whole slide images (WSI) in `*.tif` format from the [Camelyon16](https://camelyon16.grand-challenge.org/) challenge. You need to apply for data access, and once it's approved, you can download from either Google Drive, or Baidu Pan. Note that, one slide is usually ~100Kx100K pixels at level 0 and 1GB+ on disk. There are 400 slides in total, together about 700GB+. So make sure you have enough disk space. The tumor slides for training are named as `Tumor_XXX.tif`, where XXX ranges from 001 to 110. The normal slides for training are named as `Normal_XXX.tif`, where XXX ranges from 001 to 160. The slides for testing are named as `Test_XXX.tif` where XXX ranges from 001 to 130.
+The main data are the whole slide images (WSI) in `*.tif` format from the [Camelyon16](https://camelyon16.grand-challenge.org/) challenge. You need to apply on [Camelyon16](https://camelyon16.grand-challenge.org/) for data access, and once it's approved, you can download from either Google Drive, or Baidu Pan. Note that, one slide is usually ~100Kx100K pixels at level 0 and 1GB+ on disk. There are 400 slides in total, together about 700GB+. So make sure you have enough disk space. The tumor slides for training are named as `Tumor_XXX.tif`, where XXX ranges from 001 to 110. The normal slides for training are named as `Normal_XXX.tif`, where XXX ranges from 001 to 160. The slides for testing are named as `Test_XXX.tif` where XXX ranges from 001 to 130.
 
 Once you download all the slides, please put all the tumor slides and normal slides for training under one same directory, e.g. named `/WSI_TRAIN/`.
 
