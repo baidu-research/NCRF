@@ -78,6 +78,10 @@ The main data are the whole slide images (WSI) in `*.tif` format from the [Camel
 
 Once you download all the slides, please put all the tumor slides and normal slides for training under one same directory, e.g. named `/WSI_TRAIN/`.
 
+## Update
+It seems the whole slide image `*tif` files are now application free to download at [GigaDB](http://gigadb.org/dataset/100439). But still please contact the Camelyon16 organizers for data usage.
+
+
 ## Annotations
 The Camelyon16 organizers also provides annotations of tumor regions for each tumor slide in xml format. I've converted them into some what simpler json format, located under [NCRF/jsons](/jsons/). Each annotation is a list of polygons, where each polygon is represented by its vertices. Particularly, positive polygons mean tumor region and negative polygons mean normal regions. You can also use the following command to convert the xml format into the json format
 ```
