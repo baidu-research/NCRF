@@ -47,7 +47,7 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * scikit-image (0.13.1)
 
-* [openslide (1.1.0)](https://github.com/openslide/openslide-python)
+* [OpenSlide 3.4.1](https://openslide.org/)(Please don't use 3.4.0 as some potential issues found on this version)/[openslide-python (1.1.0)](https://github.com/openslide/openslide-python)
 
 * matplotlib (2.2.2)
 
