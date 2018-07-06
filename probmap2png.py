@@ -4,8 +4,8 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import os, sys, shutil
 
-probmaps_dir = './sample_data/probmaps'
-png_dir = './sample_data/png_probmaps'
+probmaps_dir = './data/probmaps'
+png_dir = './data/png_probmaps'
 try:
    os.makedirs(png_dir)
 except:
