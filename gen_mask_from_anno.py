@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib
-# matplotlib.use('agg')
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import os, sys, shutil, argparse
 import openslide
