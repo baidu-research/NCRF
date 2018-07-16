@@ -47,7 +47,7 @@ If you have any quesions, please post it on github issues or email at liyi17@bai
 
 * scikit-image (0.13.1)
 
-* [openslide (1.1.0)](https://github.com/openslide/openslide-python)
+* [OpenSlide 3.4.1](https://openslide.org/)(Please don't use 3.4.0 as some potential issues found on this version)/[openslide-python (1.1.0)](https://github.com/openslide/openslide-python)
 
 * matplotlib (2.2.2)
 
@@ -202,6 +202,8 @@ python NCRF/wsi/bin/tissue_mask.py /WSI_PATH/Test_026.tif /MASK_PATH/Test_026.np
 ```
 where `/WSI_PATH/` is the path to the WSI you are interested, and `/MASK_PATH/` is the path where you want to save the generated tissue mask in numpy format. By default, the tissue mask is generated at level 6, corresponding to the inference stride of 64, i.e. making a prediction every 64 pixels at level 0.
 
+The tissue mask of [Test_026_tissue_mask.npy](https://drive.google.com/file/d/1BdOJGeag7kq8_p1NqU_v-EQcV_OxHgcW/view) at level 6 is attached for comparison. Note that, when you plot it using matplotlib.pyplot.imshow, please transpose it.
+
 
 ## Probability map
 With the generated tissue mask, we can now obtain the probability map of a given WSI, e.g. Test_026.tif, using a trained model:
@@ -214,7 +216,7 @@ By defautl, `probs_map.py` use GPU_0 for interence, 5 processes for data loading
 ![probability_map](/doc/probability_map.png)
 This figure shows the probability maps of Test_026 with different settings: (a) original WSI, (b) ground truth annotation, (c) baseline method, (d) baseline method with hard negative mining, (e) NCRF with hard negative mining. We can see the probability map from the baseline method typically has lots of isolated false positives. Hard negative mining significantly reduces the number of false positives for the baseline method, but the probability density among the ground truth tumor regions is also decreased, which decreases model sensitivity. NCRF with hard negative mining not only achieves low false positives but also maintains high probability density among the ground truth tumor regions with sharp boundaries.
 
-
+The probability map of [Test_026_probs_map.npy](https://drive.google.com/file/d/1RLhzfhfxBkspbZmt1SXl9DS_LVi1XcxU/view) at level 6 is attached for comparison. Note that, when you plot it using matplotlib.pyplot.imshow, please transpose it.
 
 ## Tumor localization
 We use non-maximal suppression (nms) algorithm to obtain the coordinates of each detectd tumor region at level 0 given a probability map.
