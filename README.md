@@ -29,7 +29,7 @@ If you find the code/data is useful, please cite the above paper:
         year={2018}
     }
 
-If you have any quesions, please post it on github issues or email at liyi17@baidu.com, yil8@uci.edu
+If you have any quesions, please post it on github issues or email at yil8@uci.edu
 
 
 # Prerequisites
